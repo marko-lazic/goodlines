@@ -1,12 +1,14 @@
 use crate::global::Global;
+use bevy_ecs::entity::Entity;
 use bevy_ecs::system::Commands;
 use bevy_log::info;
 use common::channels::Channels;
 use common::protocol::Protocol;
-use naia_bevy_server::{Server, ServerAddrs};
+use naia_bevy_server::{Server, ServerAddrs, UserKey};
+use std::collections::HashMap;
 
 pub fn init(mut commands: Commands, mut server: Server<Protocol, Channels>) {
-    info!("Naia Bevy Server Demo is running");
+    info!("Goodlines Server Demo is running");
 
     // Naia Server initialization
     let server_addresses = ServerAddrs::new(
@@ -26,7 +28,11 @@ pub fn init(mut commands: Commands, mut server: Server<Protocol, Channels>) {
     // Create a new, singular room, which will contain Users and Entities that they
     // can receive updates from
     let main_room_key = server.make_room().key();
+    let user_entity_map: HashMap<UserKey, Entity> = HashMap::new();
 
     // Resources
-    commands.insert_resource(Global { main_room_key })
+    commands.insert_resource(Global {
+        main_room_key,
+        user_entity_map,
+    })
 }

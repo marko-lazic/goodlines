@@ -50,8 +50,7 @@ impl UiPlugin {
                     .desired_width(480.0);
                 let edit_re = ui.add(input_widget);
                 if edit_re.ctx.input().key_pressed(egui::Key::Enter) {
-                    global.send_message();
-                    ev_send_message.send(SendMessageEvent(global.input_text.clone()));
+                    global.send_message(&mut ev_send_message);
                     edit_re.request_focus();
                 }
 
@@ -61,7 +60,7 @@ impl UiPlugin {
                         ui.add_enabled(global.is_something_written(), send_btn_widget);
 
                     if send_btn_re.clicked() {
-                        global.send_message();
+                        global.send_message(&mut ev_send_message);
                         edit_re.request_focus();
                     }
                 });
