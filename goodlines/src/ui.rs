@@ -1,9 +1,8 @@
 use crate::App;
 use bevy::app::Plugin;
+use bevy::prelude::ResMut;
 
-use crate::connection::SendMessageEvent;
 use crate::global::Global;
-use bevy::prelude::{EventWriter, ResMut};
 use bevy_egui::egui::{Context, FontData, FontDefinitions, FontFamily, ScrollArea};
 use bevy_egui::{egui, EguiContext};
 
@@ -21,11 +20,7 @@ impl UiPlugin {
         Self::configure_fonts(egui_ctx.ctx_mut());
     }
 
-    fn ui_update(
-        mut egui_context: ResMut<EguiContext>,
-        mut global: ResMut<Global>,
-        mut ev_send_message: EventWriter<SendMessageEvent>,
-    ) {
+    fn ui_update(mut egui_context: ResMut<EguiContext>, mut global: ResMut<Global>) {
         egui::CentralPanel::default().show(egui_context.ctx_mut(), |ui| {
             ScrollArea::vertical()
                 .stick_to_bottom()
@@ -50,7 +45,7 @@ impl UiPlugin {
                     .desired_width(480.0);
                 let edit_re = ui.add(input_widget);
                 if edit_re.ctx.input().key_pressed(egui::Key::Enter) {
-                    global.send_message(&mut ev_send_message);
+                    global.send_message();
                     edit_re.request_focus();
                 }
 
@@ -60,7 +55,7 @@ impl UiPlugin {
                         ui.add_enabled(global.is_something_written(), send_btn_widget);
 
                     if send_btn_re.clicked() {
-                        global.send_message(&mut ev_send_message);
+                        global.send_message();
                         edit_re.request_focus();
                     }
                 });
