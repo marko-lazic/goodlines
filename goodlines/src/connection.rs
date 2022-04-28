@@ -1,3 +1,4 @@
+use crate::util::random_user_credentials;
 use crate::{App, Global};
 use bevy::app::Plugin;
 use bevy::log::info;
@@ -18,10 +19,13 @@ impl Plugin for ConnectionPlugin {
 }
 
 impl ConnectionPlugin {
-    fn init(mut client: Client<Protocol, Channels>) {
+    fn init(mut client: Client<Protocol, Channels>, mut global: ResMut<Global>) {
         info!("Goodlines chat started");
-        client.auth(Auth::new("test", "12345"));
+
+        let (username, password) = random_user_credentials();
+        client.auth(Auth::new(username, password));
         client.connect("http://127.0.0.1:14191");
+        global.username = username.to_string();
     }
 
     pub fn connect_event(client: Client<Protocol, Channels>) {

@@ -1855,6 +1855,7 @@ dependencies = [
  "common",
  "confy",
  "naia-bevy-client",
+ "rand",
  "serde",
  "tracing",
 ]

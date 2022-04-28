@@ -2,6 +2,7 @@ mod connection;
 mod global;
 mod settings;
 mod ui;
+mod util;
 
 use crate::connection::ConnectionPlugin;
 use crate::global::Global;

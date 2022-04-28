@@ -1,5 +1,6 @@
 mod global;
 mod systems;
+mod user;
 
 use bevy_app::{App, ScheduleRunnerPlugin};
 use bevy_core::CorePlugin;
@@ -11,6 +12,7 @@ use common::config::shared_config;
 use naia_bevy_server::{Plugin as ServerPlugin, ServerConfig, Stage};
 
 use crate::systems::events;
+use crate::user::UserState;
 use systems::init;
 
 fn main() {
@@ -18,6 +20,7 @@ fn main() {
     // Build App
     App::default()
         // Plugins
+        .init_resource::<UserState>()
         .add_plugin(CorePlugin::default())
         .add_plugin(ScheduleRunnerPlugin::default())
         .add_plugin(LogPlugin::default())
