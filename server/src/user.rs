@@ -1,11 +1,12 @@
 use bevy_ecs::prelude::Entity;
 use common::data::USERNAMES;
 use naia_bevy_server::UserKey;
+use std::collections::hash_map::Iter;
 use std::collections::HashMap;
 
 pub struct GoodUser {
     user_key: UserKey,
-    username: String,
+    _username: String,
     pub entity: Option<Entity>,
 }
 
@@ -13,7 +14,7 @@ impl GoodUser {
     pub fn new(user_key: UserKey, username: &String) -> Self {
         Self {
             user_key,
-            username: username.clone(),
+            _username: username.clone(),
             entity: None,
         }
     }
@@ -25,12 +26,12 @@ pub struct UserState {
 }
 
 impl UserState {
-    pub fn create(&mut self, key: UserKey, user: GoodUser) {
+    pub fn create(&mut self, user: GoodUser) {
         self.users.insert(user.user_key, user);
     }
 
-    pub fn find(&self, user_key: &UserKey) -> Option<&GoodUser> {
-        self.users.get(user_key)
+    pub fn iter(&self) -> Iter<'_, UserKey, GoodUser> {
+        self.users.iter()
     }
 
     pub fn find_mut(&mut self, user_key: &UserKey) -> Option<&mut GoodUser> {

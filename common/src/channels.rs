@@ -3,18 +3,24 @@ use naia_shared::{derive_channels, Channel, ChannelDirection, ChannelMode, Relia
 #[derive_channels]
 pub enum Channels {
     SendMessage,
-    PullMessage,
+    BroadcastMessage,
+    EntityAssignment,
 }
 
 pub const CHANNEL_CONFIG: &[Channel<Channels>] = &[
     Channel {
         index: Channels::SendMessage,
         direction: ChannelDirection::ClientToServer,
-        mode: ChannelMode::OrderedReliable(ReliableSettings::default()),
+        mode: ChannelMode::UnorderedReliable(ReliableSettings::default()),
     },
     Channel {
-        index: Channels::PullMessage,
+        index: Channels::BroadcastMessage,
         direction: ChannelDirection::ServerToClient,
-        mode: ChannelMode::OrderedReliable(ReliableSettings::default()),
+        mode: ChannelMode::UnorderedReliable(ReliableSettings::default()),
+    },
+    Channel {
+        index: Channels::EntityAssignment,
+        direction: ChannelDirection::ServerToClient,
+        mode: ChannelMode::UnorderedReliable(ReliableSettings::default()),
     },
 ];

@@ -1,10 +1,11 @@
 use bevy_ecs::prelude::Component;
 
-use naia_shared::{Property, Replicate};
+use naia_shared::{EntityProperty, Property, Replicate};
 
 #[derive(Component, Replicate)]
 #[protocol_path = "crate::protocol::Protocol"]
 pub struct Message {
+    pub entity: EntityProperty,
     pub username: Property<String>,
     pub text: Property<String>,
 }

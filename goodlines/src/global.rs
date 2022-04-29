@@ -1,3 +1,4 @@
+use bevy::prelude::Entity;
 use common::protocol::Message;
 use std::collections::VecDeque;
 
@@ -6,7 +7,31 @@ pub struct UiMessage {
     pub text: String,
 }
 
+impl UiMessage {
+    pub fn new(message: &Message) -> Self {
+        Self {
+            username: message.username.to_string(),
+            text: message.text.to_string(),
+        }
+    }
+}
+
+pub struct OwnedEntity {
+    pub confirmed: Entity,
+    pub predicted: Entity,
+}
+
+impl OwnedEntity {
+    pub fn new(confirmed_entity: Entity, predicted_entity: Entity) -> Self {
+        OwnedEntity {
+            confirmed: confirmed_entity,
+            predicted: predicted_entity,
+        }
+    }
+}
+
 pub struct Global {
+    pub owned_entity: Option<OwnedEntity>,
     pub messages: Vec<UiMessage>,
     pub username: String,
     pub input_text: String,
@@ -20,6 +45,7 @@ impl Default for Global {
             text: format!("message{}", a),
         });
         Global {
+            owned_entity: None,
             messages: Vec::from_iter(iter),
             input_text: "".to_string(),
             username: "Me".to_string(),
@@ -35,11 +61,6 @@ impl Global {
 
     pub fn send_message(&mut self) {
         if self.is_something_written() {
-            self.messages.push(UiMessage {
-                username: self.username.to_string(),
-                text: self.input_text.to_string(),
-            });
-
             self.to_be_sent.push_back(Message::new(
                 self.username.as_str(),
                 self.input_text.as_str(),

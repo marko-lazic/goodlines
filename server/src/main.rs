@@ -19,8 +19,9 @@ fn main() {
     info!("Goodlines starting up");
     // Build App
     App::default()
-        // Plugins
+        // Resources
         .init_resource::<UserState>()
+        // Plugins
         .add_plugin(CorePlugin::default())
         .add_plugin(ScheduleRunnerPlugin::default())
         .add_plugin(LogPlugin::default())
@@ -30,13 +31,12 @@ fn main() {
         ))
         // Startup System
         .add_startup_system(init)
-        // Receive Server Events
+        // Systems
         .add_system_to_stage(Stage::ReceiveEvents, events::authorization_event)
         .add_system_to_stage(Stage::ReceiveEvents, events::connection_event)
         .add_system_to_stage(Stage::ReceiveEvents, events::disconnection_event)
         .add_system_to_stage(Stage::ReceiveEvents, events::receive_message_event)
-        // Gameplay Loop on Tick
-        // .add_system_to_stage(Stage::Tick, tick)
-        // Run App
+        .add_system_to_stage(Stage::ReceiveEvents, events::broadcast_message_event)
+        .add_system_to_stage(Stage::Tick, events::tick)
         .run();
 }

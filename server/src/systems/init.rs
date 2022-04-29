@@ -3,8 +3,8 @@ use bevy_ecs::entity::Entity;
 use bevy_ecs::system::Commands;
 use bevy_log::info;
 use common::channels::Channels;
-use common::protocol::Protocol;
-use naia_bevy_server::{Server, ServerAddrs, UserKey};
+use common::protocol::{Message, Protocol};
+use naia_bevy_server::{Server, ServerAddrs};
 use std::collections::HashMap;
 
 pub fn init(mut commands: Commands, mut server: Server<Protocol, Channels>) {
@@ -28,11 +28,10 @@ pub fn init(mut commands: Commands, mut server: Server<Protocol, Channels>) {
     // Create a new, singular room, which will contain Users and Entities that they
     // can receive updates from
     let main_room_key = server.make_room().key();
-    let user_entity_map: HashMap<UserKey, Entity> = HashMap::new();
 
     // Resources
     commands.insert_resource(Global {
         main_room_key,
-        user_entity_map,
+        last_entity_message_command: HashMap::<Entity, Message>::new(),
     })
 }
